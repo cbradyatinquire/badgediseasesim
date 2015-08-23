@@ -24,6 +24,7 @@ void main()
   display("Uploading?");
   cursor(4, 5);
   display("Hold OSH");
+  pause(200);
   if (pad(6) == 1) 
   {
      heldatstart = 1;
@@ -41,22 +42,27 @@ void main()
   if (heldatstart == 1 && pad(6) == 1)
   {
     clear();
+    char_size(SMALL);
+    cursor(0, 2);
+    display("CONNECTING");
     port = fdserial_open(31, 30, 0, 115200);
     // Check for host upload
     int attempt = 0;
-    while (attempt < 5)
+    while (attempt < 50)
     {
       dprint(port, "Propeller\n");
       pause(200);
       if (fdserial_rxCount(port) == 0)
       {
         attempt++;
+        pause(200);
         continue;
       }      
       else if (fdserial_rxCount(port) < 5)
       {
         fdserial_rxFlush(port);
         attempt++;
+        pause(200);
         continue;
       }
       else dscan(port, "%s", handshake);
