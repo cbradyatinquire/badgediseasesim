@@ -37,9 +37,9 @@ def stripped(string):
 ### HELPER FUNCTIONS ###
 
 ### MAIN ###
-ports = serial_ports()
 while True:
     try:
+        ports = serial_ports()
         os.system('cls' if os.name == 'nt' else 'clear')
         raw_input('Press Enter to scan a badge.')
         for p in ports:
@@ -110,9 +110,3 @@ while True:
         
 
 ### MAIN ###
-
-### NOTES ###
-
-### TODO ###
-# -Better way to ensure disconnection, wait until user disconnects then find
-# a way to send a reset signal.
