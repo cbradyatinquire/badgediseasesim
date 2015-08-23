@@ -71,6 +71,7 @@ while True:
         # Initiate data transfer
         print 'Pulling data.'
         # Flush bytes since H0st/Propeller is being echoed (workaround)
+        print port.read(port.inWaiting())
         port.readline()
         port.readline()
 
