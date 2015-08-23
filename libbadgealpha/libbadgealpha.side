@@ -1,0 +1,20 @@
+libbadgealpha.c
+Beanie.c
+badgealpha.c
+badgealpha.h
+irhdserial.c
+jm_ebadge_leds.c
+jm_i2c.c
+jm_mma7660fc.c
+jm_time.c
+jm_touchpads.c
+oled_asmfast.c
+>compiler=C
+>memtype=cmm main ram compact
+>optimize=-Os
+>-m32bit-doubles
+>-fno-exceptions
+>defs::-std=c99
+>-lm
+>-create_library
+>BOARD::ACTIVITYBOARD
