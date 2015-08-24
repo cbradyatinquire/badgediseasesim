@@ -46,10 +46,10 @@ void main()
     port = fdserial_open(31, 30, 0, 115200);
     // Check for host upload
     int attempt = 0;
-    while (attempt < 5)
+    while (attempt < 50)
     {
       dprint(port, "Propeller\n");
-      pause(200);
+      pause(5);
       if (fdserial_rxCount(port) == 0)
       {
         attempt++;
