@@ -112,3 +112,10 @@ while True:
         
 
 ### MAIN ###
+
+# May switch around querying order. Right now, it opens the port to the badge
+# and waits for the badge to send the starting handshake. May reverse it to
+# avoid adverse effects.
+
+# Also, will have to check why Propeller echoes the handshakes back into the
+# buffer.

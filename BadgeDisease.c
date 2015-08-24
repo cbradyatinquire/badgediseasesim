@@ -6,6 +6,8 @@ info my = {{"000000"}, {"000000"}, 0};
 info their;
 info last = {{" "}, {" "}, 0};
 
+int id_address = 65335;
+
 char handshake[5];
 fdserial *port;
 
@@ -17,7 +19,14 @@ void main()
   // Initialize badge and serial connection
   badge_setup();
   simpleterm_close();
+  
+  // Pull ID from EEPROM
   leds_set(0b111111);
+  char id[7];
+  ee_getStr(id, 7, id_address);
+  strcpy(my.name, id);
+  strcpy(my.email, id);
+  
   pause(200);
   char_size(SMALL);
   cursor(3, 3);
@@ -25,11 +34,10 @@ void main()
   cursor(4, 5);
   display("Hold OSH");
   leds_set(0b000000);
-  //pause(1000);
-  //if (pad(6) == 1) 
-  //{
-  //   heldatstart = 1;
-  //}
+  if (pad(6) == 1) 
+  {
+     heldatstart = 1;
+  }
   pause(200);    
   leds_set(0b100001);
   pause(200);
@@ -39,8 +47,7 @@ void main()
   pause(300);
   clear();
   
-  //if (heldatstart == 1 && pad(6) == 1)
-  if (pad(6) == 1)
+  if (heldatstart == 1 && pad(6) == 1)
   {
     clear();
     port = fdserial_open(31, 30, 0, 115200);
@@ -49,7 +56,7 @@ void main()
     while (attempt < 50)
     {
       dprint(port, "Propeller\n");
-      pause(5);
+      pause(200);  // We need this pause, since the host needs time to respond. 5 x 1 second = 10 second timeout
       if (fdserial_rxCount(port) == 0)
       {
         attempt++;
@@ -87,9 +94,6 @@ void main()
   ir_start();
   pause(500);
   clear();
-  
-  // Pull ID from EEPROM
-  
   
   while(1)
   {
