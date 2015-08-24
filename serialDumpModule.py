@@ -94,10 +94,12 @@ while True:
 
         # Dump to file
         print 'Dumping interactions.'
-        f = open(names[0] + '-' + emails[0] + '.txt', 'w')
-        f.write('Interaction record for ' + names[0] + ' - ' + emails[0] + ':\n\n')
+        f = open('badgedata.txt', 'a')
+        #f = open(names[0] + '-' + emails[0] + '.txt', 'w')
+        #f.write('Interaction record for ' + names[0] + ' - ' + emails[0] + ':\n\n')
         for i in xrange(1, num_records):
-            f.write(names[i] + ' -> ' + emails[i] + '\n')
+            #f.write(names[i] + ',' + emails[i] + '\n')
+            f.write(names[0] + ',' + names[i] + '\n')
         f.close()
 
         raw_input('Dump complete, press Enter to exit.')
