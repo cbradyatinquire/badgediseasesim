@@ -71,7 +71,6 @@ while True:
         # Initiate data transfer
         print 'Pulling data.'
         # Flush bytes since H0st/Propeller is being echoed (workaround)
-        print port.read(port.inWaiting())
         port.readline()
         port.readline()
 
@@ -85,12 +84,12 @@ while True:
             # time.sleep(5)
             continue
 
-        names = []
-        emails = []
+        field1 = []
+        field2 = []
         # This is our own data
         for i in xrange(0, num_records):
-            names.append(stripped(port.readline()))
-            emails.append(stripped(port.readline()))
+            field1.append(stripped(port.readline()))
+            field2.append(stripped(port.readline()))
 
         # Dump to file
         print 'Dumping interactions.'
@@ -99,7 +98,7 @@ while True:
         #f.write('Interaction record for ' + names[0] + ' - ' + emails[0] + ':\n\n')
         for i in xrange(1, num_records):
             #f.write(names[i] + ',' + emails[i] + '\n')
-            f.write(names[0] + ',' + names[i] + '\n')
+            f.write(field1[0] + ',' + field1[i] + '\n')
         f.close()
 
         raw_input('Dump complete, press Enter to exit.')

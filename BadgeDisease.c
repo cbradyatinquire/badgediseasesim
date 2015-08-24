@@ -2,9 +2,9 @@
 #include "badgealpha.h"
 #include "fdserial.h"
 
-info my = {{"TEST"}, {"123890"}, 0};
+info my = {{"000000"}, {"000000"}, 0};
 info their;
-info last = {{" "}, {"000000"}, 0};
+info last = {{" "}, {" "}, 0};
 
 char handshake[5];
 fdserial *port;
@@ -24,13 +24,13 @@ void main()
   display("Uploading?");
   cursor(4, 5);
   display("Hold OSH");
-  pause(200);
-  if (pad(6) == 1) 
-  {
-     heldatstart = 1;
-  }    
   leds_set(0b000000);
-  pause(200);
+  //pause(1000);
+  //if (pad(6) == 1) 
+  //{
+  //   heldatstart = 1;
+  //}
+  pause(200);    
   leds_set(0b100001);
   pause(200);
   leds_set(0b110011);
@@ -39,30 +39,26 @@ void main()
   pause(300);
   clear();
   
-  if (heldatstart == 1 && pad(6) == 1)
+  //if (heldatstart == 1 && pad(6) == 1)
+  if (pad(6) == 1)
   {
     clear();
-    char_size(SMALL);
-    cursor(0, 2);
-    display("CONNECTING");
     port = fdserial_open(31, 30, 0, 115200);
     // Check for host upload
     int attempt = 0;
-    while (attempt < 50)
+    while (attempt < 5)
     {
       dprint(port, "Propeller\n");
       pause(200);
       if (fdserial_rxCount(port) == 0)
       {
         attempt++;
-        pause(200);
         continue;
       }      
       else if (fdserial_rxCount(port) < 5)
       {
         fdserial_rxFlush(port);
         attempt++;
-        pause(200);
         continue;
       }
       else dscan(port, "%s", handshake);
@@ -70,12 +66,12 @@ void main()
       if (strcmp(handshake, "H0st") == 0)
       {
         char_size(SMALL);
-        cursor(0, 2);
-        display("CONNECTED");
-        cursor(0, 3);
+        cursor(3, 3);
+        display("CONNECTED!");
+        cursor(2, 4);
         display("Uploading...");
         ee_uploadContacts(port);
-        cursor(0, 4);
+        cursor(0, 5);
         display("Upload complete!");
         return;
       }      
@@ -92,6 +88,9 @@ void main()
   pause(500);
   clear();
   
+  // Pull ID from EEPROM
+  
+  
   while(1)
   {
     memset(&their, 0, sizeof(info));
@@ -101,13 +100,11 @@ void main()
       clear();
       leds_set(0b000000);
       char_size(SMALL);
-      cursor(0, 0); 
-      display("ID:");
-      cursor(4, 0); 
-      display(my.email);
-      cursor(0, 2); 
+      cursor(3, 2); 
+      display("ID: %s", my.email);
+      cursor(0, 5);
       display("Last Interaction");
-      cursor(0, 3);
+      cursor(5, 6);
       display(last.name);
       while(y < -35)
       {
@@ -140,14 +137,12 @@ void main()
       message_get(&their);
       last = their;
       ee_save(&their);
-      cursor(2, 0);
+      cursor(2, 1);
       display("New Contact!");
-      cursor(0, 2);
-      display("Name: %s", their.name);
-      cursor(0, 4);
+      cursor(3, 4);
       display("ID: %s", their.email);
       cursor(0, 7);
-      display("OSH to continue");
+      display("OSH to Continue.");
       rgb(L, OFF);
       while(pad(6) != 1);     
       rgb(R, OFF);
@@ -156,11 +151,9 @@ void main()
     else
     {
       char_size(SMALL);
-      cursor(0, 0); 
-      display("Name: %s", my.name);
-      cursor(6, 0);
-      display(my.name);
-      cursor(0, 4);
+      cursor(3, 2); 
+      display("ID: %s", my.name);
+      cursor(5, 6);
       display("Ready.");
       leds_set(0b101101);
       pause(200);

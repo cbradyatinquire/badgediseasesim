@@ -410,13 +410,6 @@ void ee_uploadContacts(fdserial *term)
   ee_wipe();
 }    
 
-
-
-
-
-
-
-
 /*
 void ir_receive()
 {
