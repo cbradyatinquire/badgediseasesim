@@ -106,7 +106,7 @@ void main()
     {
       clear();
       leds_set(0b000000);
-      screen_autoUpdate(OFF);
+      //screen_autoUpdate(OFF);
       char_size(SMALL);
       cursor(3, 2); 
       display("ID: %s", my.email);
@@ -114,8 +114,8 @@ void main()
       display("Last Interaction");
       cursor(5, 6);
       display(last.name);
-      screen_img180();
-      screen_autoUpdate(ON);
+      //screen_img180();
+      //screen_autoUpdate(ON);
       while(y < -35)
       {
         tilt_get(&x, &y, &z);
@@ -148,7 +148,7 @@ void main()
       last = their;
       ee_save(&their);
       cursor(2, 1);
-      display("New Contact!");
+      display("INTERACTION!");
       cursor(3, 4);
       display("ID: %s", their.email);
       cursor(0, 7);
