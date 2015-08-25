@@ -77,6 +77,7 @@ void main()
         display("CONNECTED!");
         cursor(2, 4);
         display("Uploading...");
+        dprint(port, "PropSTART\n");
         ee_uploadContacts(port);
         cursor(0, 5);
         display("Upload complete!");

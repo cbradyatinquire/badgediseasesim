@@ -39,9 +39,9 @@ def stripped(string):
 ### MAIN ###
 while True:
     try:
-        ports = serial_ports()
         os.system('cls' if os.name == 'nt' else 'clear')
         raw_input('Press Enter to scan a badge.')
+        ports = serial_ports()
         for p in ports:
             try:
                 # Try opening ports, if we find one, send reset signal
@@ -70,9 +70,9 @@ while True:
 
         # Initiate data transfer
         print 'Pulling data.'
-        # Flush bytes since H0st/Propeller is being echoed (workaround)
-        port.readline()
-        port.readline()
+        # Flush the buffer until we get the start signal
+        while stripped(port.readline()) != 'PropSTART':
+            pass
 
         # Get records, if no records are found, it won't dump
         num_records = ord(port.readline()[0])
