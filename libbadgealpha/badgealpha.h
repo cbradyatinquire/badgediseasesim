@@ -229,6 +229,7 @@
 INLINE__ int Shr__(unsigned int a, unsigned int b) { return (a>>b); }
 */
 
+//modified 8/24
 typedef struct user_info{
   char name[7];
   char email[7];
@@ -236,6 +237,8 @@ typedef struct user_info{
 } info;  
 
 
+int screen_getAutoUpdate();                  // Added 8/23 5:00 PM
+int screen_autoUpdate(int state);            // Added 8/23 5:00 PM
 int badge_setup( void );
 int show_screen( char *p_scr );
 int display(const char *fmt, ...);
@@ -431,6 +434,7 @@ typedef struct jm_i2c {
   int screen_update( void );
 
   // Advanced
+  screen *screen_dataAddr();                     // Added 8/23 5:12 PM
   int screen_GetDisplayHeight( void );
   int screen_GetDisplayWidth( void );
   int screen_GetDisplayType( void );
@@ -597,3 +601,5 @@ __asm__ volatile( "    .global __clkmodeval\n" );
 __asm__ volatile( "    __clkmodeval = 0x6f\n" );
 */
 
+
+//extern char beanie[LCD_BUFFER_SIZE_BOTH_TYPES];

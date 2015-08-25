@@ -433,7 +433,7 @@ int32_t screen_init(int32_t ChipSelect, int32_t DataCommand, int32_t TheData, in
   self->crsrY = 0;
   self->charSize = BIG;
   screen_invert(0);
-  screen_AutoUpdateOff();
+  //screen_AutoUpdateOff();              // commented 8/23 5:26 PM
   //screen_clear();
   return 0;
 }
@@ -447,7 +447,7 @@ int32_t screen_invert( int32_t i)
   } else {
     screen_ssd1306_Command(SSD1306_NORMALDISPLAY);
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   return 0;
 }
 
@@ -536,7 +536,7 @@ int32_t screen_clear(void)
   // Clearing the display means just writing zeroes to the screen buffer.
   memset( (void *)&self->buffer[0], 0, 1*(((self->displayWidth * self->displayHeight) / 8)));
   // Clearing the display ALWAYS updates the display
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   self->crsrX = 0;
   self->crsrY = 0;
   return 0;
@@ -555,7 +555,7 @@ int32_t screen_point(int32_t x, int32_t y, int32_t color)
       self->buffer[(x + ((Shr__(y, 3)) * 128))] = self->buffer[(x + ((Shr__(y, 3)) * 128))] & (~((1<<(y % 8))));
     }
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
 }
 
 int32_t screen_update(void)
@@ -579,7 +579,7 @@ static int32_t screen_swap(int32_t a, int32_t b)
   t = ((int32_t *)a)[0];
   ((int32_t *)a)[0] = ((int32_t *)b)[0];
   ((int32_t *)b)[0] = t;
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   return 0;
 }
 
@@ -631,7 +631,7 @@ int32_t screen_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t c)
       _parm__0015[11] = _parm__0015[11] + _step__0042;
     } while (((_step__0042 > 0) && (_parm__0015[11] <= _limit__0041)) || ((_step__0042 < 0) && (_parm__0015[11] >= _limit__0041)));
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   return 0;
 }
 
@@ -642,7 +642,7 @@ int32_t screen_box(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t c)
   screen_line(x1, y0, x1, y1, c);
   screen_line(x1, y1, x0, y1, c);
   screen_line(x0, y1, x0, y0, c);
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
 }
 
 int32_t screen_string8x1(char *str, int32_t len)
@@ -659,7 +659,7 @@ int32_t screen_string8x1(char *str, int32_t len)
       i = i + _step__0044;
     } while (((_step__0044 > 0) && (i <= _limit__0043)) || ((_step__0044 < 0) && (i >= _limit__0043)));
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
 }
 
 int32_t screen_string16x4(char *str, int32_t len, int32_t row, int32_t col)
@@ -684,7 +684,7 @@ int32_t screen_string16x4(char *str, int32_t len, int32_t row, int32_t col)
       j = j + _step__0048;
     } while (((_step__0048 > 0) && (j <= _limit__0047)) || ((_step__0048 < 0) && (j >= _limit__0047)));
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   return 0;
 }
 
@@ -710,7 +710,7 @@ int32_t screen_string8x2v3(char *str, int32_t len, int32_t row, int32_t col)
       j = j + _step__0048;
     } while (((_step__0048 > 0) && (j <= _limit__0047)) || ((_step__0048 < 0) && (j >= _limit__0047)));
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   return 0;
 }
 
@@ -732,7 +732,7 @@ int32_t screen_string8x2v2(char *str, int32_t len, int32_t row, int32_t col)
       } while (((_step__0046 > 0) && (i <= _limit__0045)) || ((_step__0046 < 0) && (i >= _limit__0045)));
     }
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   return 0;
 }
 
@@ -753,7 +753,7 @@ int32_t screen_string8x2(char *str, int32_t len, int32_t row)
       } while (((_step__0046 > 0) && (i <= _limit__0045)) || ((_step__0046 < 0) && (i >= _limit__0045)));
     }
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
 }
 
 int32_t screen_char32x16(int32_t ch, int32_t row, int32_t col)
@@ -797,7 +797,7 @@ int32_t screen_char32x16(int32_t ch, int32_t row, int32_t col)
       }
     }
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   self->crsrX = col;
   self->crsrY = row;
   return 0;
@@ -822,11 +822,11 @@ int32_t screen_char7x5(int32_t ch, int32_t row, int32_t col)
       self->buffer[(((row * 128) + (col * 8)) + i)] = ((uint8_t *)(((int32_t)(&(*(uint8_t *)&oleddat[1416])) + (8 * ch)) + i))[0];
     }
   }
-  if (self->AutoUpdate) screen_update();
+  // if (self->AutoUpdate) screen_update();
   self->crsrX = col;
   self->crsrY = row;
 }
-
+/*
 int32_t screen_AutoUpdateOn(void)
 {
   // With AutoUpdate On the display is updated for you
@@ -840,7 +840,7 @@ int32_t screen_AutoUpdateOff(void)
   self->AutoUpdate = 0;
   return 0;
 }
-
+*/
 int32_t screen_GetDisplayHeight(void)
 {
   // For things that need it
@@ -973,3 +973,11 @@ void letter(char c)
 │ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                         │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
  */
+
+
+screen *screen_dataAddr()               // <added 8/23 5:27 PM>
+{
+  return self;
+}                                       // </added 8/23 5:27 PM> 
+
+

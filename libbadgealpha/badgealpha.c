@@ -11,7 +11,10 @@ int badgeLastRecordAddr;
 int badgeRecordCount;
 int badgeInfoAnchor;
 
-char ssss[20] = {"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};                   ///
+// char ssss[20] = {"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};                   // removed 8/23 4:36 PM
+
+static screen badgeScreen;   // Added 8/23, 4:30 PM
+static screen *oled;         // Added 8/23, 4:30 PM
 
 info my;
 
@@ -41,8 +44,20 @@ int32_t badge_setup(void)
   cog_run(displayControl, 512);
   print(" %c", CLS);
   char_size(BIG);
+  oled = &badgeScreen;                   // Added 8/23 4:30 PM
+  screen_autoUpdate(ON);                 // Added 8/23 4:30 PM
   return 0;
 }
+
+int screen_getAutoUpdate()                // <Added 8/23 4:43 PM>...
+{
+  return oled->AutoUpdate;
+}
+
+int screen_autoUpdate(int state)
+{
+  oled->AutoUpdate = state;
+}                                         // </Added 8/23 4:43 PM>
 
 int cogIRcom, *cogIRmgr;
 void ir_start(void)
@@ -62,7 +77,7 @@ int32_t show_screen(char *p_scr)
   // Displays two 8-line messages on OLED
   // -- uses Parallax font
   // -- both lines must be 8 characters wide
-  screen_AutoUpdateOff();
+  //screen_AutoUpdateOff();                   // commented 8/23 5:24 PM
   screen_string8x2((p_scr + 0), 8, 0);
   screen_string8x2((p_scr + 9), 8, 1);
   screen_update();
@@ -112,10 +127,12 @@ void clear_bit(int bitNum, int *val)
 void displayControl()
 {
   screen_init(OLED_CS, OLED_DC, OLED_DAT, OLED_CLK, OLED_RST, SSD1306_SWITCHCAPVCC, TYPE_128X64);
-  screen_AutoUpdateOff();
+  screen_autoUpdate(ON);                      // Changed 8/23 5:16 PM
+  
   while (1)
   {
-    screen_update();
+    if(oled->AutoUpdate);                     // Added 8/23 5:30 PM
+      screen_update();
   }
 }
 
@@ -162,7 +179,7 @@ void ir_receive()
     int i = 0;
     while(1)
     {
-      led(1, ON);
+      //led(1, ON);                                // Commented 8/23 4:46 PM
       temp = ircom_rxtime(10);
       if(temp == ETX || temp == -1)
       {
@@ -173,7 +190,7 @@ void ir_receive()
         s[i++] = (char) temp;       
       }
     }  
-    led(1, OFF);
+    //led(1, OFF);                                // Commented 8/23 4:46 PM
     //char s[16];
     //memcpy(s, &get.name, 16);
     strcpy(get->name, s);
@@ -181,19 +198,19 @@ void ir_receive()
     strcpy(get->email, &s[offset]);
     if(strncmp(get->name, "hotspot", 7) == 0)
     {
-      led(2, ON);
+      //led(2, ON);                                // Commented 8/23 4:46 PM
       ee_displayContacts();                             ///
       ir_txContacts();
       inbox = 0;
-      led(2, OFF);
+      //led(2, OFF);                                // Commented 8/23 4:46 PM
     }
     else
     {
-      led(3, ON);
+      //led(3, ON);                                // Commented 8/23 4:46 PM
       inbox = 1;
       rgb(L, GREEN);
       while(inbox);
-      led(3, OFF);
+      //led(3, OFF);                                // Commented 8/23 4:46 PM
       rgb(R, GREEN);
       //ircom_rxflush();                                 //////
     }      
@@ -204,9 +221,9 @@ void ir_receive()
 
 void ir_txContacts(void)
 {
-  led(3, ON);
+  //led(3, ON);                                // Commented 8/23 4:46 PM
   ee_badge_check();
-  led(3, OFF);
+  //led(3, OFF);                                // Commented 8/23 4:46 PM
   info record;
   memset(&record, 0, sizeof(info));
   char s[48];
@@ -264,7 +281,7 @@ void ee_wipe(void)
   ee_badge_check();                              ///
 }
 
-int show(void)
+int dev_ee_show(void)                            //changed 8/23 4:54 PM
 {
   for(int i = 0; i < 200; i++)
   {
@@ -288,7 +305,7 @@ int show(void)
 int ee_badge_check(void)
 {
   //if(badgeRecordCount) return badgeLastRecordAddr;
-  led(4, ON);
+  //led(4, ON);                                // Commented 8/23 4:46 PM
   badgeInfoAnchor = 32768 + 16;
   char s[64];
   memset(s, 0, sizeof(s));
@@ -297,24 +314,24 @@ int ee_badge_check(void)
   ss = 1 + strlen(p);
   int a = 32768;
   ee_getStr(s, 16, a);
-  led(4, OFF);
-  led(5, ON);
+  //led(4, OFF);                                // Commented 8/23 4:46 PM
+  //led(5, ON);                                // Commented 8/23 4:46 PM
 //  clear();
 //  display("%s", p);
 //  pause(1000);
   if(!strcmp(s, p))
   {
-    led(0, ON);
+    //led(0, ON);
     a = badgeInfoAnchor;
     badgeRecordCount = ee_getInt(a);
     a += 4;
     badgeLastRecordAddr = ee_getInt(a);
     a += 4;
-    led(0, OFF);
+    //led(0, OFF);                                // Commented 8/23 4:46 PM
   }
   else
   {    
-    led(4, ON);
+    //led(4, ON);                                // Commented 8/23 4:46 PM
     a = 32768;
     memcpy(p, "Parallax eBadge", 16);      ///
     //ee_putStr(p, 16, a);                 /////
@@ -322,7 +339,7 @@ int ee_badge_check(void)
     {
       ee_putByte(p[i], a++);
     }                                      ///////
-    led(4, OFF);
+    //led(4, OFF);                                // Commented 8/23 4:46 PM
     a = badgeInfoAnchor + 8;
     ss = 1 + strlen(my.name);
     ee_putStr(my.name, ss, a);
@@ -337,7 +354,7 @@ int ee_badge_check(void)
     ee_putInt(badgeLastRecordAddr, badgeInfoAnchor + 4);
     a += 4;
   }  
-  led(5, OFF);
+  //led(5, OFF);                                // Commented 8/23 4:46 PM
   return badgeLastRecordAddr;
 } 
  
@@ -409,6 +426,15 @@ void ee_uploadContacts(fdserial *term)
   }
   ee_wipe();
 }    
+
+
+
+
+
+
+
+
+
 
 /*
 void ir_receive()
