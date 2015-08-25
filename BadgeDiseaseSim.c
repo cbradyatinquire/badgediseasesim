@@ -80,6 +80,7 @@ void main()
         display("CONNECTED!");
         cursor(2, 4);
         display("Uploading...");
+        dprint(port, "PropSTART\n");
         ee_uploadContacts(port);
         cursor(0, 5);
         display("Upload complete!");
@@ -112,7 +113,7 @@ void main()
       display("ID: %s", my.email);
       cursor(0, 5);
       display("Last Interaction");
-      cursor(5, 6);
+      cursor(5, 7);
       display(last.name);
       //screen_img180();
       //screen_autoUpdate(ON);
