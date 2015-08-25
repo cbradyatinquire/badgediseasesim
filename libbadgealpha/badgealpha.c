@@ -63,7 +63,7 @@ int cogIRcom, *cogIRmgr;
 void ir_start(void)
 {
   cogIRcom = ircom_start(IR_IN, IR_OUT, 2400, 38500);
-  cogIRmgr = cog_run(ir_receive, 512);
+  cogIRmgr = cog_run(ir_receive, 128);
 }  
 
 void ir_stop(void)

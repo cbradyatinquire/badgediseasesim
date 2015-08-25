@@ -107,7 +107,7 @@ void main()
     {
       clear();
       leds_set(0b000000);
-      //screen_autoUpdate(OFF);
+      screen_autoUpdate(OFF);
       char_size(SMALL);
       cursor(3, 2); 
       display("ID: %s", my.email);
@@ -115,8 +115,8 @@ void main()
       display("Last Interaction");
       cursor(5, 7);
       display(last.name);
-      //screen_img180();
-      //screen_autoUpdate(ON);
+      screen_img180();
+      screen_autoUpdate(ON);
       while(y < -35)
       {
         tilt_get(&x, &y, &z);
