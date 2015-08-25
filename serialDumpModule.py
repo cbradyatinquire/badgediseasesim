@@ -39,8 +39,8 @@ def stripped(string):
 ### MAIN ###
 while True:
     try:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        raw_input('Press Enter to scan a badge.')
+        #os.system('cls' if os.name == 'nt' else 'clear')
+        #raw_input('Press Enter to scan a badge.')
         ports = serial_ports()
         for p in ports:
             try:
@@ -55,7 +55,8 @@ while True:
             port.isOpen()
         except:
             raw_input('Unable to find a badge, press Enter to continue.')
-            continue
+            #continue
+            break
         # Wait until we receive handshake
         print 'Port opened, hold OSH on your badge.'
         port.open()
@@ -71,7 +72,7 @@ while True:
         # Initiate data transfer
         print 'Pulling data.'
         # Flush the buffer until we get the start signal
-        while stripped(port.readline()) != 'PropSTART':
+        while 'PropSTART' not in stripped(port.readline()):
             pass
 
         # Get records, if no records are found, it won't dump
@@ -81,8 +82,8 @@ while True:
         if num_records == 1:
             raw_input('No records found, press Enter to exit.')
             port.close()
-            # time.sleep(5)
-            continue
+            #continue
+            break
 
         field1 = []
         field2 = []
@@ -103,12 +104,14 @@ while True:
 
         raw_input('Dump complete, press Enter to exit.')
         port.close()
-        # time.sleep(5)
+        break
+
     except Exception, err:
         print(traceback.format_exc())
         raw_input('Enter to continue.')
         port.close()
-        continue
+        #continue
+        break
         
 
 ### MAIN ###
