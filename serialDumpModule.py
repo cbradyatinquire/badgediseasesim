@@ -75,6 +75,9 @@ while True:
         while 'PropSTART' not in stripped(port.readline()):
             pass
 
+        # Debug transmission
+        #print port.read(port.inWaiting())
+
         # Get records, if no records are found, it won't dump
         num_records = ord(port.readline()[0])
         # For num_records, since Propeller cannot send an int yet, we send a byte
