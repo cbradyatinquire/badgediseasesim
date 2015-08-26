@@ -436,7 +436,7 @@ INPUTBOX
 468
 621
 which
-2
+4
 1
 0
 Number
